@@ -1,0 +1,48 @@
+service: user-api-serverless
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-east-1:172037405705:table/users
+
+plugins:
+  - serverless-offline
+
+functions:
+  getAllUsers:
+    handler: src/getAllUsers.getAllUsers
+    events:
+      - http:
+          path: users
+          method: get
+  createUser:
+    handler: src/createUser.createUser
+    events:
+      - http:
+          path: users
+          method: post
+  getUser:
+    handler: src/getUserById.getUser
+    events:
+      - http:
+          path: users/{id}
+          method: get
+  updateUser:
+    handler: src/updateUser.updateUser
+    events:
+      - http:
+          path: users/{id}
+          method: put
+  deleteUser:
+    handler: src/deleteUser.deleteUser
+    events:
+      - http:
+          path: users/{id}
+          method: delete
